@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoVision AI - App Operacional</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <section class="auth-panel" id="loginScreen">
+      <div class="brand">
+        <span class="brand-mark">E</span>
+        <div>
+          <h1>EcoVision AI</h1>
+          <p>Monitoramento inteligente de denúncias ambientais</p>
+        </div>
+      </div>
+
+      <form class="auth-card" id="loginForm">
+        <h2>Entrar</h2>
+        <label>
+          Email
+          <input type="email" id="email" placeholder="ana@ecovision.com" required>
+        </label>
+        <label>
+          Senha
+          <input type="password" id="password" placeholder="123456" required>
+        </label>
+        <button type="submit">Acessar dashboard</button>
+        <button type="button" class="secondary" id="createDemoUser">Criar usuário demo</button>
+        <a class="back-site presentation-link" href="/ecovision">Ver apresentação</a>
+        <p class="message" id="authMessage"></p>
+      </form>
+    </section>
+
+    <section class="dashboard hidden" id="dashboardScreen">
+      <aside class="sidebar">
+        <div class="brand compact">
+          <span class="brand-mark">E</span>
+          <h1>EcoVision AI</h1>
+        </div>
+        <nav>
+          <a href="#indicadores">Indicadores</a>
+          <a href="#inteligente">Sensores</a>
+          <a href="#alertas">Alertas</a>
+          <a href="#mapa">Mapa</a>
+          <a href="#denuncias">Denúncias</a>
+          <a href="#analise">Análise IA</a>
+        </nav>
+        <div class="sidebar-actions">
+          <a class="secondary-link presentation-link" href="/ecovision">Apresentação</a>
+          <button class="secondary" id="logoutButton">Sair</button>
+        </div>
+      </aside>
+
+      <section class="content">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Centro ambiental</p>
+            <h2>Dashboard</h2>
+          </div>
+          <div class="topbar-status">
+            <span id="lastUpdate">Última atualização: agora</span>
+            <span id="userName"></span>
+          </div>
+        </header>
+
+        <section class="metrics" id="indicadores">
+          <article>
+            <span>Total de alertas</span>
+            <strong id="totalReports">0</strong>
+          </article>
+          <article>
+            <span>Alertas críticos</span>
+            <strong id="highSeverity">0</strong>
+          </article>
+          <article>
+            <span>Pendentes de análise</span>
+            <strong id="pendingReports">0</strong>
+          </article>
+          <article>
+            <span>Locais monitorados</span>
+            <strong id="monitoredLocations">0</strong>
+          </article>
+        </section>
+
+        <section class="smart-dashboard" id="inteligente">
+          <div class="sensor-grid">
+            <article class="sensor-card" id="airQualityCard">
+              <span class="sensor-label"><span class="sensor-icon" aria-hidden="true">🌫️</span>Qualidade do ar</span>
+              <strong><span id="airQualityValue">0</span> AQI</strong>
+              <small id="airQualityLabel">🟢 Normal</small>
+              <p class="sensor-insight" id="airQualityInsight">Qualidade do ar boa. Condições adequadas para atividades ao ar livre.</p>
+            </article>
+            <article class="sensor-card" id="temperatureCard">
+              <span class="sensor-label"><span class="sensor-icon" aria-hidden="true">🌡️</span>Temperatura</span>
+              <strong><span id="temperatureValue">0</span>°C</strong>
+              <small id="temperatureLabel">🟢 Normal</small>
+            </article>
+            <article class="sensor-card" id="humidityCard">
+              <span class="sensor-label"><span class="sensor-icon" aria-hidden="true">💧</span>Umidade</span>
+              <strong><span id="humidityValue">0</span>%</strong>
+              <small id="humidityLabel">🟢 Normal</small>
+            </article>
+            <article class="sensor-card" id="co2Card">
+              <span class="sensor-label"><span class="sensor-icon" aria-hidden="true">🌿</span>CO₂</span>
+              <strong><span id="co2Value">0</span> ppm</strong>
+              <small id="co2Label">🟢 Normal</small>
+            </article>
+          </div>
+
+          <section class="panel alerts-panel" id="alertas">
+            <div class="panel-header">
+              <h3>Alertas em tempo real</h3>
+              <span class="alert-counter" id="alertCounter">0 ativos</span>
+            </div>
+            <article class="external-api-card is-loading" id="externalApiCard">
+              <div>
+                <span class="external-api-kicker">API externa</span>
+                <strong id="externalApiTitle">Open-Meteo · Brasília, DF</strong>
+                <p id="externalApiRecommendation">Carregando dados públicos de qualidade do ar...</p>
+              </div>
+              <dl>
+                <div>
+                  <dt>AQI</dt>
+                  <dd id="externalAqi">--</dd>
+                </div>
+                <div>
+                  <dt>Temp.</dt>
+                  <dd id="externalTemperature">--</dd>
+                </div>
+                <div>
+                  <dt>Umidade</dt>
+                  <dd id="externalHumidity">--</dd>
+                </div>
+                <div>
+                  <dt>PM2.5</dt>
+                  <dd id="externalPm25">--</dd>
+                </div>
+              </dl>
+              <small id="externalApiStatus"><span class="loading-dot" aria-hidden="true"></span>Carregando sensores externos...</small>
+            </article>
+            <div class="alert-channels">
+              <span>Agora mesmo</span>
+              <span>Notificado</span>
+              <span>Monitorado</span>
+            </div>
+            <div class="alerts-list" id="alertsList">
+              <p class="muted">Nenhum alerta ativo.</p>
+            </div>
+          </section>
+
+          <section class="panel chart-panel">
+            <div class="panel-header">
+              <h3>Monitoramento ambiental</h3>
+              <span class="live-indicator">Tempo real</span>
+            </div>
+            <canvas id="environmentChart" height="130"></canvas>
+            <p class="muted fallback-message hidden" id="chartFallback">Não foi possível carregar a biblioteca de gráficos.</p>
+          </section>
+
+          <section class="panel comparison-panel">
+            <h3>Comparação semanal</h3>
+            <div class="comparison-grid">
+              <article>
+                <span>Hoje</span>
+                <strong id="todayAverage">0</strong>
+                <small>índice médio</small>
+              </article>
+              <article>
+                <span>Semana anterior</span>
+                <strong id="previousAverage">0</strong>
+                <small>índice médio</small>
+              </article>
+              <article>
+                <span>Variação</span>
+                <strong id="weeklyVariation">0%</strong>
+                <small id="variationLabel">estável</small>
+              </article>
+            </div>
+          </section>
+        </section>
+
+        <section class="panel map-panel" id="mapa">
+          <div class="panel-header">
+            <h3>Mapa de ocorrências</h3>
+            <span class="muted">Pontos de coleta e denúncias</span>
+          </div>
+          <div id="reportsMap"></div>
+          <p class="muted fallback-message hidden" id="mapFallback">Não foi possível carregar a biblioteca de mapas.</p>
+        </section>
+
+        <section class="workspace">
+          <form class="panel" id="reportForm">
+            <h3>Nova denúncia</h3>
+            <label>
+              Título
+              <input id="reportTitle" required>
+            </label>
+            <label>
+              Descrição
+              <textarea id="reportDescription" rows="4" maxlength="500" required></textarea>
+              <span class="char-counter" id="descriptionCounter">0/500</span>
+            </label>
+            <div class="grid-2">
+              <label>
+                Localização
+                <input id="reportLocation" required>
+              </label>
+              <label>
+                Categoria
+                <select id="reportCategory" required>
+                  <option>Queimada</option>
+                  <option>Desmatamento</option>
+                  <option>Resíduos</option>
+                  <option>Saneamento</option>
+                  <option>Poluição</option>
+                </select>
+              </label>
+            </div>
+            <label>
+              Severidade
+              <select id="reportSeverity">
+                <option value="baixa">Baixa</option>
+                <option value="media" selected>Média</option>
+                <option value="alta">Alta</option>
+              </select>
+            </label>
+            <label>
+              Evidência fotográfica
+              <input type="file" id="evidenceImage" accept="image/png, image/jpeg, image/webp" capture="environment">
+            </label>
+            <div class="image-preview hidden" id="evidencePreview"></div>
+            <button type="submit" id="submitReportButton" disabled>Registrar denúncia</button>
+            <p class="message" id="reportMessage"></p>
+          </form>
+
+          <section class="panel analysis-panel" id="analise">
+            <h3>Análise IA</h3>
+            <p class="muted">A análise usa palavras-chave para estimar risco e prioridade.</p>
+            <div class="analysis-visual" aria-hidden="true">
+              <div class="bot-orb">IA</div>
+              <div class="risk-meter">
+                <span id="riskMeterFill"></span>
+              </div>
+              <small id="riskMeterLabel">Aguardando texto</small>
+            </div>
+            <button type="button" id="analyzeButton">Analisar texto da denúncia</button>
+            <div class="analysis-progress hidden" id="analysisProgress" aria-hidden="true">
+              <span></span>
+            </div>
+            <div class="analysis-result" id="analysisResult">
+              <span>Risco aguardando análise</span>
+            </div>
+          </section>
+        </section>
+
+        <section class="panel" id="denuncias">
+          <div class="panel-header">
+            <h3>Denúncias ambientais</h3>
+            <p class="message" id="filterMessage"></p>
+          </div>
+          <form class="filters" id="reportFilters">
+            <label>
+              Status
+              <select id="filterStatus">
+                <option value="">Todos</option>
+                <option value="pendente">Pendente</option>
+                <option value="em_analise">Em análise</option>
+                <option value="resolvida">Resolvida</option>
+                <option value="arquivada">Arquivada</option>
+              </select>
+            </label>
+            <label>
+              Severidade
+              <select id="filterSeverity">
+                <option value="">Todas</option>
+                <option value="baixa">Baixa</option>
+                <option value="media">Média</option>
+                <option value="alta">Alta</option>
+              </select>
+            </label>
+            <label>
+              Categoria
+              <select id="filterCategory">
+                <option value="">Todas</option>
+                <option>Queimada</option>
+                <option>Desmatamento</option>
+                <option>Resíduos</option>
+                <option>Saneamento</option>
+                <option>Poluição</option>
+              </select>
+            </label>
+            <label>
+              Localização
+              <input id="filterLocation" placeholder="Buscar por local">
+            </label>
+            <button type="submit">Aplicar filtros</button>
+            <button type="button" class="secondary" id="clearFilters">Limpar</button>
+          </form>
+          <div class="reports-list" id="reportsList"></div>
+        </section>
+      </section>
+    </section>
+
+    <section class="chat-widget" aria-label="Chat EcoVision AI">
+      <div class="chat-panel" id="ecoChatPanel" hidden>
+        <div class="chat-header">
+          <div class="chat-title">
+            <span>Assistente EcoVision</span>
+            <span>Monitoramento ambiental em Brasília</span>
+          </div>
+          <button class="chat-close" id="ecoChatClose" type="button" aria-label="Fechar chat">×</button>
+        </div>
+        <div class="chat-messages" id="ecoChatMessages" aria-live="polite"></div>
+        <div class="chat-suggestions" aria-label="Sugestões de perguntas">
+          <button class="chat-suggestion" type="button" data-question="Qual o nível do ar?">Ar agora</button>
+          <button class="chat-suggestion" type="button" data-question="Qual a temperatura?">Temperatura</button>
+          <button class="chat-suggestion" type="button" data-question="Como está a umidade?">Umidade</button>
+        </div>
+        <form class="chat-form" id="ecoChatForm">
+          <input class="chat-input" id="ecoChatInput" type="text" placeholder="Pergunte sobre o dashboard" autocomplete="off">
+          <button class="chat-send" type="submit">Enviar</button>
+        </form>
+      </div>
+      <button class="chat-toggle" id="ecoChatToggle" type="button" onclick="abrirChat()" aria-expanded="false" aria-controls="ecoChatPanel">
+        Chat EcoVision
+      </button>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+  <script src="js/services/apiService.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

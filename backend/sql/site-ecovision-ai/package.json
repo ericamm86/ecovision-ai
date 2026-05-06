@@ -1,0 +1,17 @@
+{
+  "name": "site-ecovision-ai",
+  "version": "1.0.0",
+  "description": "EcoVision AI com landing page, autenticação e dashboard protegido.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "ecovision",
+    "login",
+    "dashboard"
+  ],
+  "author": "",
+  "license": "MIT"
+}

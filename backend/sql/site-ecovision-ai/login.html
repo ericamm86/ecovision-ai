@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entrar - EcoVision AI</title>
+  <style>
+    :root {
+      --bg: #f7faf8;
+      --surface: #ffffff;
+      --ink: #0b1f16;
+      --muted: #607267;
+      --green: #13a85b;
+      --green-dark: #047857;
+      --mint: #d9fbe5;
+      --lime: #b9f45a;
+      --line: #dbe9df;
+      --danger: #b42318;
+      --shadow: 0 24px 70px rgba(6, 63, 42, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      padding: 28px;
+      color: var(--ink);
+      background:
+        linear-gradient(90deg, rgba(247, 250, 248, 0.98), rgba(247, 250, 248, 0.88) 48%, rgba(247, 250, 248, 0.58)),
+        url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1900&q=88") center/cover;
+      font-family: Inter, Arial, Helvetica, sans-serif;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .auth-shell {
+      width: min(1040px, 100%);
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(360px, 0.72fr);
+      gap: 34px;
+      align-items: center;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      margin-bottom: 34px;
+      font-weight: 900;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      color: #ffffff;
+      background:
+        radial-gradient(circle at 28% 24%, var(--lime), transparent 30%),
+        linear-gradient(135deg, var(--green), #0e8f83);
+      box-shadow: 0 12px 26px rgba(19, 168, 91, 0.3);
+    }
+
+    .intro h1 {
+      max-width: 620px;
+      margin: 0 0 20px;
+      font-size: clamp(3rem, 7vw, 6.8rem);
+      line-height: 0.9;
+      letter-spacing: 0;
+    }
+
+    .intro p {
+      max-width: 590px;
+      margin: 0;
+      color: #29483a;
+      font-size: 1.12rem;
+      line-height: 1.6;
+    }
+
+    .auth-card {
+      padding: 26px;
+      border: 1px solid rgba(189, 217, 199, 0.9);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.84);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 22px;
+      padding: 5px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #f3faf5;
+    }
+
+    .tab {
+      min-height: 42px;
+      border: 0;
+      border-radius: 9px;
+      color: var(--muted);
+      background: transparent;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .tab.is-active {
+      color: var(--green-dark);
+      background: #ffffff;
+      box-shadow: 0 10px 24px rgba(6, 63, 42, 0.08);
+    }
+
+    .form {
+      display: none;
+      gap: 14px;
+    }
+
+    .form.is-active {
+      display: grid;
+    }
+
+    label {
+      display: grid;
+      gap: 7px;
+      color: var(--muted);
+      font-size: 0.86rem;
+      font-weight: 900;
+    }
+
+    input {
+      width: 100%;
+      min-height: 48px;
+      padding: 0 13px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      color: var(--ink);
+      background: #ffffff;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 4px rgba(19, 168, 91, 0.13);
+    }
+
+    .submit {
+      min-height: 50px;
+      margin-top: 4px;
+      border: 0;
+      border-radius: 10px;
+      color: #ffffff;
+      background: var(--green);
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 16px 34px rgba(19, 168, 91, 0.28);
+    }
+
+    .submit:disabled {
+      opacity: 0.75;
+      cursor: wait;
+    }
+
+    .message {
+      min-height: 22px;
+      margin: 14px 0 0;
+      color: var(--danger);
+      font-size: 0.92rem;
+      font-weight: 800;
+    }
+
+    .back-link {
+      display: inline-flex;
+      margin-top: 20px;
+      color: var(--green-dark);
+      font-weight: 900;
+    }
+
+    @media (max-width: 860px) {
+      body {
+        place-items: start center;
+      }
+
+      .auth-shell {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 520px) {
+      body {
+        padding: 18px;
+      }
+
+      .auth-card {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="auth-shell">
+    <section class="intro" aria-labelledby="auth-title">
+      <a class="brand" href="/ecovision" aria-label="Voltar para EcoVision AI">
+        <span class="brand-mark">E</span>
+        <span>EcoVision AI</span>
+      </a>
+      <h1 id="auth-title">Acesse sua operação ambiental.</h1>
+      <p>Entre para acompanhar alertas, visualizar o painel do DF e preparar a integração com dados reais do projeto.</p>
+    </section>
+
+    <section class="auth-card" aria-label="Acesso ao EcoVision AI">
+      <div class="tabs" role="tablist" aria-label="Modo de acesso">
+        <button class="tab is-active" type="button" data-target="loginForm">Entrar</button>
+        <button class="tab" type="button" data-target="registerForm">Cadastrar</button>
+      </div>
+
+      <form class="form is-active" id="loginForm">
+        <label>
+          E-mail
+          <input name="email" type="email" autocomplete="email" required>
+        </label>
+        <label>
+          Senha
+          <input name="password" type="password" autocomplete="current-password" required>
+        </label>
+        <button class="submit" type="submit">Entrar no dashboard</button>
+      </form>
+
+      <form class="form" id="registerForm">
+        <label>
+          Nome
+          <input name="name" type="text" autocomplete="name" required>
+        </label>
+        <label>
+          E-mail
+          <input name="email" type="email" autocomplete="email" required>
+        </label>
+        <label>
+          Senha
+          <input name="password" type="password" autocomplete="new-password" minlength="8" required>
+        </label>
+        <button class="submit" type="submit">Criar conta</button>
+      </form>
+
+      <p class="message" id="message" aria-live="polite"></p>
+      <a class="back-link" href="/ecovision">Voltar para apresentação</a>
+    </section>
+  </main>
+
+  <script>
+    const tabs = document.querySelectorAll(".tab");
+    const forms = document.querySelectorAll(".form");
+    const message = document.getElementById("message");
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        tabs.forEach((item) => item.classList.toggle("is-active", item === tab));
+        forms.forEach((form) => form.classList.toggle("is-active", form.id === tab.dataset.target));
+        message.textContent = "";
+      });
+    });
+
+    const submitForm = async (form, endpoint) => {
+      const button = form.querySelector("button");
+      button.disabled = true;
+      message.textContent = "";
+
+      try {
+        const response = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(Object.fromEntries(new FormData(form)))
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.message || "Não foi possível continuar.");
+        }
+
+        window.location.href = "/dashboard";
+      } catch (error) {
+        message.textContent = error.message;
+      } finally {
+        button.disabled = false;
+      }
+    };
+
+    document.getElementById("loginForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      submitForm(event.currentTarget, "/api/login");
+    });
+
+    document.getElementById("registerForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      submitForm(event.currentTarget, "/api/register");
+    });
+  </script>
+</body>
+</html>
