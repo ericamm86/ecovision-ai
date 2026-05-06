@@ -124,13 +124,14 @@ async function updateStatus(id, status) {
 async function getStats() {
   if (useFileDb) {
     const data = fileStore.read();
-    const locations = new Set(data.reports.map((report) => report.location));
+    const locations = [...new Set(data.reports.map((report) => report.location).filter(Boolean))];
 
     return {
       total_reports: data.reports.length,
       high_severity: data.reports.filter((report) => report.severity === "alta").length,
       pending_reports: data.reports.filter((report) => report.status === "pendente").length,
-      monitored_locations: locations.size
+      monitored_locations: locations.length,
+      monitored_location_names: locations
     };
   }
 
@@ -139,7 +140,8 @@ async function getStats() {
       COUNT(*)::int AS total_reports,
       COUNT(*) FILTER (WHERE severity = 'alta')::int AS high_severity,
       COUNT(*) FILTER (WHERE status = 'pendente')::int AS pending_reports,
-      COUNT(DISTINCT location)::int AS monitored_locations
+      COUNT(DISTINCT location)::int AS monitored_locations,
+      COALESCE(array_agg(DISTINCT location) FILTER (WHERE location IS NOT NULL AND location <> ''), '{}') AS monitored_location_names
     FROM reports
   `);
 

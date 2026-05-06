@@ -854,9 +854,20 @@ async function loadDashboard() {
   document.querySelector("#highSeverity").textContent = stats.high_severity || 0;
   document.querySelector("#pendingReports").textContent = stats.pending_reports || 0;
   document.querySelector("#monitoredLocations").textContent = stats.monitored_locations || 0;
+  document.querySelector("#monitoredLocationsSummary").textContent = formatLocationSummary(stats.monitored_location_names);
 
   renderReports(reports);
   renderReportsMap(reports);
+}
+
+function formatLocationSummary(locations = []) {
+  const visibleLocations = locations.filter(Boolean).slice(0, 3);
+
+  if (!visibleLocations.length) {
+    return "Nenhum local cadastrado";
+  }
+
+  return visibleLocations.join(" · ");
 }
 
 function renderReports(reports) {
