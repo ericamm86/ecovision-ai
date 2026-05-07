@@ -69,8 +69,6 @@ const authMessage = document.querySelector("#authMessage");
 const reportMessage = document.querySelector("#reportMessage");
 const filterMessage = document.querySelector("#filterMessage");
 const reportsList = document.querySelector("#reportsList");
-const pendingAnalysisList = document.querySelector("#pendingAnalysisList");
-const pendingAnalysisCounter = document.querySelector("#pendingAnalysisCounter");
 const alertsList = document.querySelector("#alertsList");
 const alertCounter = document.querySelector("#alertCounter");
 const evidenceImageInput = document.querySelector("#evidenceImage");
@@ -952,10 +950,9 @@ function showLogin() {
 }
 
 async function loadDashboard() {
-  const [stats, reports, pendingAnalysisReports] = await Promise.all([
+  const [stats, reports] = await Promise.all([
     api("/reports/stats"),
-    api(`/reports${buildReportQuery()}`),
-    api("/reports?status=pendente")
+    api(`/reports${buildReportQuery()}`)
   ]);
 
   document.querySelector("#totalReports").textContent = stats.total_reports || 0;
@@ -964,7 +961,6 @@ async function loadDashboard() {
   document.querySelector("#monitoredLocations").textContent = stats.monitored_locations || demoMonitoredLocations.length;
   document.querySelector("#monitoredLocationsSummary").textContent = formatLocationSummary(stats.monitored_location_names);
 
-  renderPendingAnalysis(pendingAnalysisReports);
   renderReports(reports);
   renderReportsMap(reports);
 }
@@ -974,34 +970,6 @@ function formatLocationSummary(locations = []) {
   const displayLocations = visibleLocations.length ? visibleLocations : demoMonitoredLocations;
 
   return `Demo: ${displayLocations.join(" · ")}`;
-}
-
-function renderPendingAnalysis(reports) {
-  pendingAnalysisList.innerHTML = "";
-  pendingAnalysisCounter.textContent = `${reports.length} ${reports.length === 1 ? "pendente" : "pendentes"}`;
-  pendingAnalysisCounter.classList.toggle("has-alerts", reports.length > 0);
-
-  if (!reports.length) {
-    pendingAnalysisList.innerHTML = "<p class=\"muted\">Nenhuma pendencia de analise.</p>";
-    return;
-  }
-
-  reports.forEach((report) => {
-    const item = document.createElement("article");
-    item.className = `pending-item ${escapeHTML(report.severity)}`;
-    item.innerHTML = `
-      <div>
-        <strong>${escapeHTML(report.title)}</strong>
-        <span>${escapeHTML(report.location)}</span>
-      </div>
-      <div class="badges">
-        <span class="badge ${escapeHTML(report.severity)}">${formatSeverity(report.severity)}</span>
-        <span class="badge">${escapeHTML(report.category)}</span>
-        <span class="badge status-pendente">Pendente</span>
-      </div>
-    `;
-    pendingAnalysisList.appendChild(item);
-  });
 }
 
 function renderReports(reports) {

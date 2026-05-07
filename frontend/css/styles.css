@@ -690,54 +690,10 @@ p {
 }
 
 .alerts-list,
-.pending-list,
 .reports-list,
 .comparison-grid {
   display: grid;
   gap: 10px;
-}
-
-.pending-panel {
-  border-color: rgba(244, 201, 93, 0.42);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(254, 243, 199, 0.66));
-}
-
-.pending-item {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 14px;
-  border: 1px solid var(--line);
-  border-left: 6px solid var(--amber);
-  border-radius: 10px;
-  background: #ffffff;
-  box-shadow: var(--shadow-soft);
-  padding: 14px 16px;
-}
-
-.pending-item.alta {
-  border-left-color: var(--danger);
-}
-
-.pending-item.baixa {
-  border-left-color: var(--green);
-}
-
-.pending-item div:first-child {
-  min-width: 0;
-  display: grid;
-  gap: 4px;
-}
-
-.pending-item strong,
-.pending-item span {
-  overflow-wrap: anywhere;
-}
-
-.pending-item div:first-child span {
-  color: var(--muted);
-  font-size: 0.9rem;
-  font-weight: 800;
 }
 
 .alert-item {
@@ -1199,14 +1155,9 @@ p {
   .topbar,
   .panel-header,
   .report-heading,
-  .alert-item,
-  .pending-item {
+  .alert-item {
     align-items: stretch;
     flex-direction: column;
-  }
-
-  .pending-item {
-    grid-template-columns: 1fr;
   }
 
   .brand h1 {
