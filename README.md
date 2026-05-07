@@ -67,6 +67,32 @@ npm run dev
 http://localhost:3000
 ```
 
+## Deploy na Vercel
+
+O projeto j&aacute; inclui `vercel.json`, `api/index.js` e um `package.json` na raiz para publicar o Express como fun&ccedil;&atilde;o serverless.
+
+Na Vercel, importe o reposit&oacute;rio e mantenha a raiz do projeto como o diret&oacute;rio principal do reposit&oacute;rio.
+
+Configure as vari&aacute;veis de ambiente:
+
+```text
+USE_FILE_DB=false
+DATABASE_URL=sua_url_postgres
+JWT_SECRET=um_segredo_forte
+JWT_EXPIRES_IN=1d
+```
+
+Para produ&ccedil;&atilde;o, use PostgreSQL externo, como Neon, Supabase ou outro provedor. O modo `USE_FILE_DB=true` &eacute; indicado apenas para desenvolvimento local.
+
+Depois do deploy, valide:
+
+```text
+/
+/ecovision
+/app
+/health
+```
+
 ## Rotas da API
 
 - `POST /users/register`: cria usuario
