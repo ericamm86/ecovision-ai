@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="EcoVision AI, plataforma de inteligência ambiental para monitoramento, análise visual e apoio a decisões sustentáveis.">
-  <title>EcoVision AI - Inteligencia Ambiental</title>
+  <title>Monitoramento Ambiental Inteligente com Visao Computacional de Alta Precisao</title>
   <link rel="icon" href="data:,">
   <style>
     :root {
@@ -226,11 +226,20 @@
       font-size: clamp(1.08rem, 2vw, 1.28rem);
     }
 
-    .hero-actions {
+    .hero-actions,
+    .cta-actions {
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
+    }
+
+    .hero-actions {
       margin-bottom: 30px;
+    }
+
+    .cta-actions {
+      justify-content: center;
+      margin-top: 28px;
     }
 
     .button-primary {
@@ -290,12 +299,17 @@
     }
 
     .product-shell {
+      position: relative;
+      left: 88px;
+      width: min(680px, 100%);
       border: 1px solid rgba(189, 217, 199, 0.9);
       border-radius: 18px;
       background: rgba(255, 255, 255, 0.76);
       box-shadow: var(--shadow);
       overflow: hidden;
       backdrop-filter: blur(18px);
+      justify-self: end;
+      transform: translateX(96px);
     }
 
     .product-topbar {
@@ -636,6 +650,7 @@
     }
 
     #como-funciona {
+      display: none;
       padding: 92px 6vw;
       background: var(--surface-soft);
       border-top: 1px solid var(--line);
@@ -840,20 +855,203 @@
       font-size: 1.06rem;
     }
 
-    .tech-stack {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
+    .tech-note {
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: var(--green-dark);
+      font-size: 0.95rem;
+      font-weight: 800;
     }
 
-    .tech-chip {
-      padding: 12px 14px;
+    .dashboard-preview {
+      padding: 18px;
       border: 1px solid var(--line);
-      border-radius: 10px;
-      background: #ffffff;
-      color: #173528;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #ffffff, #f6faf8);
+      box-shadow: var(--shadow);
+    }
+
+    .preview-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .preview-title {
+      margin: 0;
+      color: var(--ink);
+      font-size: 1rem;
       font-weight: 900;
-      box-shadow: var(--shadow-soft);
+    }
+
+    .preview-status {
+      padding: 6px 10px;
+      border-radius: 999px;
+      color: var(--green-dark);
+      background: var(--mint);
+      font-size: 0.76rem;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .preview-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 14px;
+    }
+
+    .preview-map,
+    .preview-panel,
+    .preview-metric {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #ffffff;
+      overflow: hidden;
+    }
+
+    .preview-map {
+      min-height: 270px;
+      position: relative;
+      background:
+        radial-gradient(circle at 68% 32%, rgba(14, 143, 131, 0.36), transparent 0 18%, transparent 34%),
+        radial-gradient(circle at 36% 62%, rgba(185, 244, 90, 0.28), transparent 0 13%, transparent 28%),
+        linear-gradient(36deg, transparent 46%, rgba(255, 255, 255, 0.35) 47% 50%, transparent 51%),
+        linear-gradient(135deg, rgba(6, 63, 42, 0.94), rgba(19, 168, 91, 0.72));
+    }
+
+    .preview-map::before,
+    .preview-map::after {
+      content: "";
+      position: absolute;
+      pointer-events: none;
+    }
+
+    .preview-map::before {
+      width: 56%;
+      height: 30%;
+      left: 21%;
+      top: 35%;
+      border: 2px solid rgba(255, 255, 255, 0.28);
+      border-left-color: transparent;
+      border-right-color: transparent;
+      border-radius: 50%;
+      transform: rotate(-12deg);
+    }
+
+    .preview-map::after {
+      width: 72%;
+      height: 4px;
+      left: 13%;
+      top: 56%;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.28);
+      box-shadow: 0 46px 0 rgba(255, 255, 255, 0.18), 0 -46px 0 rgba(255, 255, 255, 0.16);
+      transform: rotate(-17deg);
+    }
+
+    .preview-scan {
+      position: absolute;
+      z-index: 1;
+      border: 3px solid var(--mint);
+      border-radius: 10px;
+      background: rgba(217, 251, 229, 0.18);
+    }
+
+    .preview-scan.one {
+      width: 34%;
+      height: 28%;
+      left: 20%;
+      top: 22%;
+    }
+
+    .preview-scan.two {
+      width: 30%;
+      height: 25%;
+      right: 14%;
+      bottom: 18%;
+    }
+
+    .preview-map-label,
+    .preview-map-tag {
+      position: absolute;
+      z-index: 2;
+      border-radius: 10px;
+      font-weight: 900;
+    }
+
+    .preview-map-label {
+      left: 18px;
+      top: 18px;
+      padding: 8px 10px;
+      color: #ffffff;
+      background: rgba(6, 63, 42, 0.7);
+    }
+
+    .preview-map-tag {
+      left: 18px;
+      right: 18px;
+      bottom: 18px;
+      padding: 10px 12px;
+      color: var(--green-dark);
+      background: rgba(255, 255, 255, 0.9);
+      font-size: 0.86rem;
+    }
+
+    .preview-side {
+      display: grid;
+      gap: 14px;
+    }
+
+    .preview-panel,
+    .preview-metric {
+      padding: 16px;
+    }
+
+    .preview-panel h3,
+    .preview-metric span {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .preview-bars {
+      height: 112px;
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+      align-items: end;
+    }
+
+    .preview-bars span {
+      display: block;
+      border-radius: 8px 8px 0 0;
+      background: linear-gradient(180deg, var(--green), var(--mint));
+    }
+
+    .preview-bars span:nth-child(1) { height: 42%; }
+    .preview-bars span:nth-child(2) { height: 68%; }
+    .preview-bars span:nth-child(3) { height: 52%; }
+    .preview-bars span:nth-child(4) { height: 88%; }
+    .preview-bars span:nth-child(5) { height: 74%; }
+    .preview-bars span:nth-child(6) { height: 58%; }
+
+    .preview-metric strong {
+      display: block;
+      color: var(--green-dark);
+      font-size: 2rem;
+      line-height: 1;
+    }
+
+    .preview-metric p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-weight: 800;
     }
 
     .roadmap-grid {
@@ -940,11 +1138,18 @@
       font-size: 1.08rem;
     }
 
-    .cta-final button {
+    .cta-final .button-primary,
+    .cta-final .button-secondary {
       min-height: 48px;
       padding: 10px 22px;
       font-weight: 900;
       box-shadow: 0 18px 38px rgba(0, 0, 0, 0.2);
+    }
+
+    .cta-final .button-secondary {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.34);
     }
 
     .scale-proof {
@@ -1050,6 +1255,7 @@
 
       .product-shell {
         max-width: 820px;
+        left: 0;
       }
 
       .section-heading {
@@ -1128,6 +1334,14 @@
         display: none;
       }
 
+      .preview-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .preview-map {
+        min-height: 220px;
+      }
+
       .use-grid {
         grid-template-columns: 1fr;
       }
@@ -1143,12 +1357,12 @@
           <span>EcoVision AI</span>
         </a>
         <nav class="nav-links" aria-label="Secoes">
-          <a href="#produto">Produto</a>
-          <a href="#solucao">Solu&ccedil;&atilde;o</a>
-          <a href="#casos">Casos de uso</a>
+          <a href="#problema">O Problema</a>
+          <a href="#solucao">A Solu&ccedil;&atilde;o</a>
+          <a href="#diferenciais">Diferenciais T&eacute;cnicos</a>
           <a href="#roadmap">Dashboard</a>
         </nav>
-        <button class="nav-cta" type="button" onclick="window.location.href = window.location.protocol === 'file:' ? 'site-ecovision-ai/app.html' : '/app'">Testar agora</button>
+        <button class="nav-cta" type="button" onclick="window.location.href = window.location.protocol === 'file:' ? 'site-ecovision-ai/app.html' : '/app'">Acessar Login</button>
       </div>
     </header>
 
@@ -1156,13 +1370,14 @@
       <div class="hero-inner">
         <div class="hero-copy">
           <p class="eyebrow">Plataforma de intelig&ecirc;ncia ambiental</p>
-          <h1 id="title">EcoVision AI</h1>
+          <h1 id="title">Monitoramento Ambiental Inteligente com Visao Computacional de Alta Precisao</h1>
           <p class="lead">
             Transforme dados ambientais em decis&otilde;es inteligentes em tempo real.
           </p>
           <div class="hero-actions">
-            <a class="button-primary" href="#produto">Ver o produto</a>
-            <a class="button-secondary" href="#roadmap">Status do projeto</a>
+            <a class="button-primary app-link" href="/app">Acessar Dashboard</a>
+            <a class="button-secondary" href="mailto:contato@ecovision.ai?subject=Solicitar%20demonstra%C3%A7%C3%A3o%20EcoVision%20AI">Solicitar Demonstra&ccedil;&atilde;o</a>
+            <a class="button-secondary" href="mailto:contato@ecovision.ai?subject=Falar%20com%20um%20especialista%20EcoVision%20AI">Falar com um Especialista</a>
           </div>
           <div class="hero-proof" aria-label="Diferenciais do projeto">
             <span class="proof-pill">Vis&atilde;o computacional</span>
@@ -1258,23 +1473,23 @@
       <span>Previs&otilde;es ambientais</span>
     </div>
 
-    <section class="section" aria-labelledby="trust-title">
+    <section class="section" id="problema" aria-labelledby="problema-title">
       <div class="section-inner">
         <div class="section-heading">
           <div>
-            <p class="section-label">Vis&atilde;o</p>
-            <h2 id="trust-title">Um produto digital para equipes que precisam enxergar mudan&ccedil;as ambientais.</h2>
+            <p class="section-label">O Problema</p>
+            <h2 id="problema-title">Monitorar manualmente &eacute; lento, caro e dif&iacute;cil de escalar.</h2>
           </div>
           <p class="section-copy">
-            O EcoVision AI nasce como uma plataforma de apresenta&ccedil;&atilde;o e evolui para um
-            sistema de monitoramento com dados visuais, prioriza&ccedil;&atilde;o e relat&oacute;rios claros.
+            Muitas an&aacute;lises ambientais ainda dependem de revis&otilde;es visuais demoradas,
+            registros dispersos e pouca prioriza&ccedil;&atilde;o para equipes que precisam agir r&aacute;pido.
           </p>
         </div>
         <div class="logo-row" aria-label="Publicos atendidos">
-          <div class="logo-card">Educa&ccedil;&atilde;o</div>
-          <div class="logo-card">Pesquisa</div>
-          <div class="logo-card">Gest&atilde;o</div>
-          <div class="logo-card">Sustentabilidade</div>
+          <div class="logo-card">An&aacute;lise lenta</div>
+          <div class="logo-card">Dados dispersos</div>
+          <div class="logo-card">Baixa previsibilidade</div>
+          <div class="logo-card">Resposta tardia</div>
         </div>
       </div>
     </section>
@@ -1289,16 +1504,16 @@
       </ul>
     </section>
 
-    <section class="section alt" id="produto" aria-labelledby="produto-title">
+    <section class="section alt" id="solucao" aria-labelledby="solucao-title">
       <div class="section-inner">
         <div class="section-heading">
           <div>
-            <p class="section-label">Produto</p>
-            <h2 id="produto-title">Da imagem bruta ao insight ambiental em poucos passos.</h2>
+            <p class="section-label">A Solu&ccedil;&atilde;o</p>
+            <h2 id="solucao-title">Da imagem bruta ao insight ambiental em poucos passos.</h2>
           </div>
           <p class="section-copy">
-            A interface foi pensada para parecer um produto real: objetiva, visual, com dados
-            organizados e foco no que a equipe precisa decidir.
+            O EcoVision AI organiza imagens, den&uacute;ncias e indicadores em um fluxo claro para
+            transformar sinais ambientais em decis&otilde;es r&aacute;pidas e acion&aacute;veis.
           </p>
         </div>
 
@@ -1322,37 +1537,37 @@
       </div>
     </section>
 
-    <section class="section" id="solucao" aria-labelledby="solucao-title">
+    <section class="section" id="diferenciais" aria-labelledby="diferenciais-title">
       <div class="section-inner">
         <div class="problem-grid">
           <div class="problem-panel">
-            <p class="section-label">Problema</p>
-            <h2 id="solucao-title">Monitorar manualmente &eacute; lento, caro e dif&iacute;cil de escalar.</h2>
+            <p class="section-label">Diferenciais T&eacute;cnicos</p>
+            <h2 id="diferenciais-title">Vis&atilde;o computacional, APIs e dados prontos para escalar.</h2>
             <p>
-              Muitas an&aacute;lises ambientais dependem de revis&otilde;es visuais demoradas. O EcoVision AI
-              reduz esse atrito ao organizar os dados e tornar sinais de risco mais vis&iacute;veis.
+              A plataforma combina an&aacute;lise visual, integra&ccedil;&atilde;o de dados e pain&eacute;is operacionais
+              para apoiar decis&otilde;es ambientais com rastreabilidade e velocidade.
             </p>
           </div>
           <div class="workflow">
             <article class="workflow-step">
               <span class="step-number">01</span>
               <div>
-                <h3>Coleta visual</h3>
-                <p>O usu&aacute;rio envia registros de campo, imagens a&eacute;reas ou bases visuais existentes.</p>
+                <h3>Vis&atilde;o computacional</h3>
+                <p>Identifica padr&otilde;es, anomalias e regi&otilde;es de interesse em registros visuais.</p>
               </div>
             </article>
             <article class="workflow-step">
               <span class="step-number">02</span>
               <div>
-                <h3>Processamento por IA</h3>
-                <p>O sistema identifica padr&otilde;es, anomalias e regi&otilde;es que merecem revis&atilde;o.</p>
+                <h3>Integra&ccedil;&atilde;o por APIs</h3>
+                <p>Conecta den&uacute;ncias, sensores e bases ambientais para reduzir trabalho manual.</p>
               </div>
             </article>
             <article class="workflow-step">
               <span class="step-number">03</span>
               <div>
-                <h3>Painel de decis&atilde;o</h3>
-                <p>Os resultados aparecem com indicadores, hist&oacute;rico, prioridade e status de revis&atilde;o.</p>
+                <h3>Prioriza&ccedil;&atilde;o operacional</h3>
+                <p>Classifica alertas por risco, hist&oacute;rico e status para orientar a resposta da equipe.</p>
               </div>
             </article>
           </div>
@@ -1403,17 +1618,42 @@
               A proposta combina interface web, APIs, banco de dados e modelos de vis&atilde;o
               computacional para criar uma experi&ecirc;ncia completa de intelig&ecirc;ncia ambiental.
             </p>
+            <p class="tech-note">
+              Constru&iacute;do com Node.js, Express, PostgreSQL, JWT, HTML, CSS e JavaScript em uma arquitetura MVC simples de manter.
+            </p>
           </div>
-          <div class="tech-stack" aria-label="Lista de tecnologias">
-            <span class="tech-chip">HTML</span>
-            <span class="tech-chip">CSS</span>
-            <span class="tech-chip">JavaScript</span>
-            <span class="tech-chip">Python</span>
-            <span class="tech-chip">APIs REST</span>
-            <span class="tech-chip">Banco de Dados</span>
-            <span class="tech-chip">Intelig&ecirc;ncia Artificial</span>
-            <span class="tech-chip">Vis&atilde;o Computacional</span>
-          </div>
+          <aside class="dashboard-preview" aria-label="Previa visual do dashboard EcoVision AI">
+            <div class="preview-top">
+              <p class="preview-title">EcoVision em a&ccedil;&atilde;o</p>
+              <span class="preview-status">dados em tempo real</span>
+            </div>
+            <div class="preview-grid">
+              <div class="preview-map">
+                <span class="preview-map-label">Bras&iacute;lia, DF</span>
+                <span class="preview-scan one"></span>
+                <span class="preview-scan two"></span>
+                <span class="preview-map-tag">3 regi&otilde;es priorizadas pela IA</span>
+              </div>
+              <div class="preview-side">
+                <div class="preview-panel">
+                  <h3>Alertas por bioma</h3>
+                  <div class="preview-bars" aria-hidden="true">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+                </div>
+                <div class="preview-metric">
+                  <span>confian&ccedil;a m&eacute;dia</span>
+                  <strong>92%</strong>
+                  <p>an&aacute;lises classificadas por risco ambiental</p>
+                </div>
+              </div>
+            </div>
+          </aside>
         </div>
       </div>
     </section>
@@ -1422,29 +1662,29 @@
       <div class="section-inner">
         <div class="section-heading">
           <div>
-            <p class="section-label">Plano de evolu&ccedil;&atilde;o</p>
-            <h2 id="roadmap-title">Evolu&ccedil;&atilde;o do EcoVision AI</h2>
+            <p class="section-label">Roadmap do Produto</p>
+            <h2 id="roadmap-title">Pr&oacute;ximas capacidades do EcoVision AI</h2>
           </div>
           <p class="section-copy">
-            A interface j&aacute; apresenta a proposta do produto. As pr&oacute;ximas etapas focam na
-            integra&ccedil;&atilde;o com backend, dados reais, recursos operacionais e acesso seguro.
+            O roadmap prioriza valor de produto: decis&atilde;o ambiental mais clara, integra&ccedil;&otilde;es
+            confi&aacute;veis e intelig&ecirc;ncia aplicada ao ciclo completo de monitoramento.
           </p>
         </div>
         <div class="roadmap-grid">
           <article class="roadmap-card">
-            <span class="roadmap-status concluido">Conclu&iacute;do</span>
-            <h3>Apresenta&ccedil;&atilde;o institucional conclu&iacute;da</h3>
-            <p>P&aacute;gina responsiva com identidade visual profissional, proposta de valor clara e simula&ccedil;&atilde;o do painel principal.</p>
+            <span class="roadmap-status concluido">Experi&ecirc;ncia</span>
+            <h3>Interface e UX Ambientais</h3>
+            <p>Arquitetura visual otimizada para tomada de decis&atilde;o e proposta de valor fundamentada em dados.</p>
           </article>
           <article class="roadmap-card">
-            <span class="roadmap-status andamento">Em desenvolvimento</span>
-            <h3>Integra&ccedil;&atilde;o com servi&ccedil;os do backend</h3>
-            <p>Conex&atilde;o do bot&atilde;o de interesse com a API, utilizando o endpoint <strong>/api/interest</strong> para registrar intera&ccedil;&otilde;es reais.</p>
+            <span class="roadmap-status andamento">Conectividade</span>
+            <h3>Integra&ccedil;&atilde;o Assistida via API</h3>
+            <p>Conectividade total com sistemas externos e processamento de dados em tempo real.</p>
           </article>
           <article class="roadmap-card">
-            <span class="roadmap-status planejado">Planejado</span>
-            <h3>Painel operacional completo</h3>
-            <p>Evolu&ccedil;&atilde;o para envio de imagens, autentica&ccedil;&atilde;o, banco de dados, an&aacute;lises ambientais e relat&oacute;rios gerenciais.</p>
+            <span class="roadmap-status planejado">Intelig&ecirc;ncia</span>
+            <h3>Ecossistema de Intelig&ecirc;ncia</h3>
+            <p>Expans&atilde;o para an&aacute;lises preditivas, relat&oacute;rios gerenciais automatizados e BI ambiental.</p>
           </article>
         </div>
       </div>
@@ -1453,7 +1693,11 @@
     <section class="cta-final">
       <h2>Pronto para transformar dados em a&ccedil;&atilde;o?</h2>
       <p>Monitore, analise e receba alertas ambientais em tempo real com o EcoVision AI.</p>
-      <button type="button" onclick="window.location.href = window.location.protocol === 'file:' ? 'site-ecovision-ai/app.html' : '/app'">Testar agora</button>
+      <div class="cta-actions">
+        <a class="button-primary app-link" href="/app">Acessar Dashboard</a>
+        <a class="button-secondary" href="mailto:contato@ecovision.ai?subject=Solicitar%20demonstra%C3%A7%C3%A3o%20EcoVision%20AI">Solicitar Demonstra&ccedil;&atilde;o</a>
+        <a class="button-secondary" href="mailto:contato@ecovision.ai?subject=Falar%20com%20um%20especialista%20EcoVision%20AI">Falar com um Especialista</a>
+      </div>
     </section>
 
     <p class="scale-proof">Mais de 1.000 an&aacute;lises ambientais simuladas processadas.</p>
@@ -1468,10 +1712,10 @@
         <div>
           <h4>Plataforma</h4>
           <ul>
-            <li>Produto</li>
-            <li>Solu&ccedil;&otilde;es</li>
+            <li>O Problema</li>
+            <li>A Solu&ccedil;&atilde;o</li>
+            <li>Diferenciais T&eacute;cnicos</li>
             <li>Dashboard</li>
-            <li>Como funciona</li>
           </ul>
         </div>
 
@@ -1490,7 +1734,7 @@
 
   <script>
     const revealItems = document.querySelectorAll(
-      ".hero-copy, .product-shell, .logo-card, .section-heading, .feature-card, .problem-panel, .workflow-step, .use-card, .tech-copy, .tech-chip, .roadmap-card, .cta .section-inner"
+      ".hero-copy, .product-shell, .logo-card, .section-heading, .feature-card, .problem-panel, .workflow-step, .use-card, .tech-copy, .dashboard-preview, .roadmap-card, .cta .section-inner"
     );
 
     revealItems.forEach((item) => item.classList.add("reveal"));

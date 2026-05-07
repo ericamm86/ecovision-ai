@@ -2,7 +2,7 @@
   "users": [
     {
       "id": 1,
-      "name": "Ana Verde",
+      "name": "Ana",
       "email": "ana@ecovision.com",
       "password_hash": "$2a$10$v/8CGYTZIt5WZLg4gduMDeqrC6qu3SsdOMmwIumoT98cnpIqPr.cW",
       "created_at": "2026-05-06T19:28:26.075Z"

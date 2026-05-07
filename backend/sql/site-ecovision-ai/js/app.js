@@ -929,7 +929,7 @@ document.querySelector("#createDemoUser").addEventListener("click", async () => 
     await api("/users/register", {
       method: "POST",
       body: JSON.stringify({
-        name: "Ana Verde",
+        name: "Ana",
         email: "ana@ecovision.com",
         password: "123456"
       })
