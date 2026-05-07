@@ -2,10 +2,7 @@
   "version": 2,
   "functions": {
     "api/index.js": {
-      "includeFiles": [
-        "backend/sql/site-ecovision-ai/**",
-        "frontend/**"
-      ]
+      "includeFiles": "{backend/sql/site-ecovision-ai/**,frontend/**}"
     }
   },
   "rewrites": [
