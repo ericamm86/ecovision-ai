@@ -30,6 +30,11 @@ const streamingSeed = {
 };
 
 const API_POLLING_INTERVAL_MS = 30000;
+const demoMonitoredLocations = [
+  "Plano Piloto, Brasilia - DF",
+  "Lago Paranoa, Brasilia - DF",
+  "Eixo Monumental, Brasilia - DF"
+];
 
 const chartMetricStyles = {
   airQuality: {
@@ -853,7 +858,7 @@ async function loadDashboard() {
   document.querySelector("#totalReports").textContent = stats.total_reports || 0;
   document.querySelector("#highSeverity").textContent = stats.high_severity || 0;
   document.querySelector("#pendingReports").textContent = stats.pending_reports || 0;
-  document.querySelector("#monitoredLocations").textContent = stats.monitored_locations || 0;
+  document.querySelector("#monitoredLocations").textContent = stats.monitored_locations || demoMonitoredLocations.length;
   document.querySelector("#monitoredLocationsSummary").textContent = formatLocationSummary(stats.monitored_location_names);
 
   renderReports(reports);
@@ -862,12 +867,9 @@ async function loadDashboard() {
 
 function formatLocationSummary(locations = []) {
   const visibleLocations = locations.filter(Boolean).slice(0, 3);
+  const displayLocations = visibleLocations.length ? visibleLocations : demoMonitoredLocations;
 
-  if (!visibleLocations.length) {
-    return "Nenhum local cadastrado";
-  }
-
-  return visibleLocations.join(" · ");
+  return `Demo: ${displayLocations.join(" · ")}`;
 }
 
 function renderReports(reports) {
