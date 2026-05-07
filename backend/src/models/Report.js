@@ -1,7 +1,8 @@
 const db = require("../config/db");
 const fileStore = require("../config/fileStore");
+const { shouldUseFileDb } = require("../config/storageMode");
 
-const useFileDb = process.env.USE_FILE_DB === "true";
+const useFileDb = shouldUseFileDb();
 
 function withUserName(report, users) {
   const user = users.find((item) => item.id === report.user_id);

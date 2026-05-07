@@ -1,11 +1,20 @@
 const fs = require("fs");
+const os = require("os");
 const path = require("path");
 
-const dataDir = path.join(__dirname, "..", "..", "data");
-const dbPath = path.join(dataDir, "dev-db.json");
+const dataDir = process.env.VERCEL ? os.tmpdir() : path.join(__dirname, "..", "..", "data");
+const dbPath = path.join(dataDir, process.env.VERCEL ? "ecovision-dev-db.json" : "dev-db.json");
 
 const initialData = {
-  users: [],
+  users: [
+    {
+      id: 1,
+      name: "Ana Verde",
+      email: "ana@ecovision.com",
+      password_hash: "$2a$10$v/8CGYTZIt5WZLg4gduMDeqrC6qu3SsdOMmwIumoT98cnpIqPr.cW",
+      created_at: new Date().toISOString()
+    }
+  ],
   reports: [
     {
       id: 1,
