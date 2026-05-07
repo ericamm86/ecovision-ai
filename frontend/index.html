@@ -44,6 +44,7 @@
         </div>
         <nav>
           <a href="#indicadores">Indicadores</a>
+          <a href="#pendencias">Pendencias</a>
           <a href="#inteligente">Sensores</a>
           <a href="#alertas">Alertas</a>
           <a href="#mapa">Mapa</a>
@@ -88,6 +89,16 @@
           </article>
         </section>
 
+        <section class="panel pending-panel" id="pendencias">
+          <div class="panel-header">
+            <h3>Pendencias de analise</h3>
+            <span class="alert-counter" id="pendingAnalysisCounter">0 pendentes</span>
+          </div>
+          <div class="pending-list" id="pendingAnalysisList">
+            <p class="muted">Nenhuma pendencia de analise.</p>
+          </div>
+        </section>
+
         <section class="smart-dashboard" id="inteligente">
           <div class="sensor-grid">
             <article class="sensor-card" id="airQualityCard">
@@ -95,21 +106,28 @@
               <strong><span id="airQualityValue">0</span> AQI</strong>
               <small id="airQualityLabel">🟢 Normal</small>
               <p class="sensor-insight" id="airQualityInsight">Qualidade do ar boa. Condições adequadas para atividades ao ar livre.</p>
+              <dl class="sensor-details" id="airQualityDetails"></dl>
             </article>
             <article class="sensor-card" id="temperatureCard">
               <span class="sensor-label"><span class="sensor-icon" aria-hidden="true">🌡️</span>Temperatura</span>
               <strong><span id="temperatureValue">0</span>°C</strong>
               <small id="temperatureLabel">🟢 Normal</small>
+              <p class="sensor-insight" id="temperatureInsight">Temperatura dentro da faixa confortavel para operacao em campo.</p>
+              <dl class="sensor-details" id="temperatureDetails"></dl>
             </article>
             <article class="sensor-card" id="humidityCard">
               <span class="sensor-label"><span class="sensor-icon" aria-hidden="true">💧</span>Umidade</span>
               <strong><span id="humidityValue">0</span>%</strong>
               <small id="humidityLabel">🟢 Normal</small>
+              <p class="sensor-insight" id="humidityInsight">Umidade equilibrada, sem indicio critico de ar seco ou saturacao.</p>
+              <dl class="sensor-details" id="humidityDetails"></dl>
             </article>
             <article class="sensor-card" id="co2Card">
               <span class="sensor-label"><span class="sensor-icon" aria-hidden="true">🌿</span>CO₂</span>
               <strong><span id="co2Value">0</span> ppm</strong>
               <small id="co2Label">🟢 Normal</small>
+              <p class="sensor-insight" id="co2Insight">CO2 dentro do esperado, indicando boa circulacao de ar.</p>
+              <dl class="sensor-details" id="co2Details"></dl>
             </article>
           </div>
 

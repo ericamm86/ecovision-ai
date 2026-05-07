@@ -494,6 +494,36 @@ p {
   line-height: 1.35;
 }
 
+.sensor-details {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 2px 0 0;
+}
+
+.sensor-details div {
+  min-width: 0;
+  padding: 9px;
+  border: 1px solid rgba(189, 217, 199, 0.74);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.sensor-details dt {
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.sensor-details dd {
+  margin: 3px 0 0;
+  color: var(--green-deep);
+  font-size: 0.9rem;
+  font-weight: 900;
+  overflow-wrap: anywhere;
+}
+
 .panel {
   min-width: 0;
   display: grid;
@@ -660,10 +690,54 @@ p {
 }
 
 .alerts-list,
+.pending-list,
 .reports-list,
 .comparison-grid {
   display: grid;
   gap: 10px;
+}
+
+.pending-panel {
+  border-color: rgba(244, 201, 93, 0.42);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(254, 243, 199, 0.66));
+}
+
+.pending-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  border: 1px solid var(--line);
+  border-left: 6px solid var(--amber);
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: var(--shadow-soft);
+  padding: 14px 16px;
+}
+
+.pending-item.alta {
+  border-left-color: var(--danger);
+}
+
+.pending-item.baixa {
+  border-left-color: var(--green);
+}
+
+.pending-item div:first-child {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.pending-item strong,
+.pending-item span {
+  overflow-wrap: anywhere;
+}
+
+.pending-item div:first-child span {
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 800;
 }
 
 .alert-item {
@@ -1118,12 +1192,21 @@ p {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .sensor-details {
+    grid-template-columns: 1fr;
+  }
+
   .topbar,
   .panel-header,
   .report-heading,
-  .alert-item {
+  .alert-item,
+  .pending-item {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .pending-item {
+    grid-template-columns: 1fr;
   }
 
   .brand h1 {

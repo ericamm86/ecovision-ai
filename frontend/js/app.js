@@ -69,6 +69,8 @@ const authMessage = document.querySelector("#authMessage");
 const reportMessage = document.querySelector("#reportMessage");
 const filterMessage = document.querySelector("#filterMessage");
 const reportsList = document.querySelector("#reportsList");
+const pendingAnalysisList = document.querySelector("#pendingAnalysisList");
+const pendingAnalysisCounter = document.querySelector("#pendingAnalysisCounter");
 const alertsList = document.querySelector("#alertsList");
 const alertCounter = document.querySelector("#alertCounter");
 const evidenceImageInput = document.querySelector("#evidenceImage");
@@ -374,6 +376,92 @@ function getAirQualityInsight(status) {
   return "Qualidade do ar ruim. Reduza atividades externas e acompanhe os alertas.";
 }
 
+function getSensorInsight(type, status, value) {
+  if (type === "airQuality") {
+    return getAirQualityInsight(status);
+  }
+
+  if (type === "temperature") {
+    if (status.level === "normal") {
+      return `Temperatura em ${value}°C, dentro da faixa confortavel para monitoramento em campo.`;
+    }
+
+    if (status.level === "attention") {
+      return `Temperatura em ${value}°C. Reforce hidratacao e reduza exposicao ao sol.`;
+    }
+
+    return `Temperatura critica em ${value}°C. Priorize alertas e atividades emergenciais.`;
+  }
+
+  if (type === "humidity") {
+    if (status.level === "normal") {
+      return `Umidade em ${value}%, faixa adequada para conforto ambiental.`;
+    }
+
+    if (value < 40) {
+      return `Umidade baixa em ${value}%. Acompanhe risco de ar seco e focos de queimada.`;
+    }
+
+    return `Umidade elevada em ${value}%. Observe risco de saturacao e pontos de alagamento.`;
+  }
+
+  if (status.level === "normal") {
+    return `CO2 em ${value} ppm, indicando boa circulacao de ar.`;
+  }
+
+  if (status.level === "attention") {
+    return `CO2 em ${value} ppm. Recomenda-se melhorar ventilacao e acompanhar a tendencia.`;
+  }
+
+  return `CO2 critico em ${value} ppm. Verifique ventilacao e priorize resposta operacional.`;
+}
+
+function getTrendLabel(values) {
+  if (values.length < 2) {
+    return "estavel";
+  }
+
+  const previous = values[values.length - 2];
+  const current = values[values.length - 1];
+  const difference = current - previous;
+
+  if (Math.abs(difference) <= 1) {
+    return "estavel";
+  }
+
+  return difference > 0 ? "subindo" : "caindo";
+}
+
+function renderSensorDetails(elementId, values, unit) {
+  const element = document.querySelector(elementId);
+  const currentValues = values.filter((value) => Number.isFinite(value));
+
+  if (!currentValues.length) {
+    element.innerHTML = "";
+    return;
+  }
+
+  const min = Math.min(...currentValues);
+  const max = Math.max(...currentValues);
+  const avg = average(currentValues);
+  const trend = getTrendLabel(currentValues);
+
+  element.innerHTML = `
+    <div>
+      <dt>Media</dt>
+      <dd>${avg}${unit}</dd>
+    </div>
+    <div>
+      <dt>Faixa</dt>
+      <dd>${min}-${max}${unit}</dd>
+    </div>
+    <div>
+      <dt>Tendencia</dt>
+      <dd>${trend}</dd>
+    </div>
+  `;
+}
+
 function getActiveAlerts() {
   const data = state.environmentalData;
   const sensors = [
@@ -439,30 +527,44 @@ function updateSensorCard(cardId, valueId, labelId, type, value) {
 
 function renderSensorCards() {
   const data = state.environmentalData;
+  const currentAirQuality = getLastValue(data.airQuality);
+  const currentTemperature = getLastValue(data.temperature);
+  const currentHumidity = getLastValue(data.humidity);
+  const currentCo2 = getLastValue(data.co2);
 
   const airQualityStatus = updateSensorCard(
     "#airQualityCard",
     "#airQualityValue",
     "#airQualityLabel",
     "airQuality",
-    getLastValue(data.airQuality)
+    currentAirQuality
   );
   document.querySelector("#airQualityInsight").textContent = getAirQualityInsight(airQualityStatus);
-  updateSensorCard(
+  renderSensorDetails("#airQualityDetails", data.airQuality, " AQI");
+
+  const temperatureStatus = updateSensorCard(
     "#temperatureCard",
     "#temperatureValue",
     "#temperatureLabel",
     "temperature",
-    getLastValue(data.temperature)
+    currentTemperature
   );
-  updateSensorCard(
+  document.querySelector("#temperatureInsight").textContent = getSensorInsight("temperature", temperatureStatus, currentTemperature);
+  renderSensorDetails("#temperatureDetails", data.temperature, "°C");
+
+  const humidityStatus = updateSensorCard(
     "#humidityCard",
     "#humidityValue",
     "#humidityLabel",
     "humidity",
-    getLastValue(data.humidity)
+    currentHumidity
   );
-  updateSensorCard("#co2Card", "#co2Value", "#co2Label", "co2", getLastValue(data.co2));
+  document.querySelector("#humidityInsight").textContent = getSensorInsight("humidity", humidityStatus, currentHumidity);
+  renderSensorDetails("#humidityDetails", data.humidity, "%");
+
+  const co2Status = updateSensorCard("#co2Card", "#co2Value", "#co2Label", "co2", currentCo2);
+  document.querySelector("#co2Insight").textContent = getSensorInsight("co2", co2Status, currentCo2);
+  renderSensorDetails("#co2Details", data.co2, " ppm");
 }
 
 function renderComparison() {
@@ -850,9 +952,10 @@ function showLogin() {
 }
 
 async function loadDashboard() {
-  const [stats, reports] = await Promise.all([
+  const [stats, reports, pendingAnalysisReports] = await Promise.all([
     api("/reports/stats"),
-    api(`/reports${buildReportQuery()}`)
+    api(`/reports${buildReportQuery()}`),
+    api("/reports?status=pendente")
   ]);
 
   document.querySelector("#totalReports").textContent = stats.total_reports || 0;
@@ -861,6 +964,7 @@ async function loadDashboard() {
   document.querySelector("#monitoredLocations").textContent = stats.monitored_locations || demoMonitoredLocations.length;
   document.querySelector("#monitoredLocationsSummary").textContent = formatLocationSummary(stats.monitored_location_names);
 
+  renderPendingAnalysis(pendingAnalysisReports);
   renderReports(reports);
   renderReportsMap(reports);
 }
@@ -870,6 +974,34 @@ function formatLocationSummary(locations = []) {
   const displayLocations = visibleLocations.length ? visibleLocations : demoMonitoredLocations;
 
   return `Demo: ${displayLocations.join(" · ")}`;
+}
+
+function renderPendingAnalysis(reports) {
+  pendingAnalysisList.innerHTML = "";
+  pendingAnalysisCounter.textContent = `${reports.length} ${reports.length === 1 ? "pendente" : "pendentes"}`;
+  pendingAnalysisCounter.classList.toggle("has-alerts", reports.length > 0);
+
+  if (!reports.length) {
+    pendingAnalysisList.innerHTML = "<p class=\"muted\">Nenhuma pendencia de analise.</p>";
+    return;
+  }
+
+  reports.forEach((report) => {
+    const item = document.createElement("article");
+    item.className = `pending-item ${escapeHTML(report.severity)}`;
+    item.innerHTML = `
+      <div>
+        <strong>${escapeHTML(report.title)}</strong>
+        <span>${escapeHTML(report.location)}</span>
+      </div>
+      <div class="badges">
+        <span class="badge ${escapeHTML(report.severity)}">${formatSeverity(report.severity)}</span>
+        <span class="badge">${escapeHTML(report.category)}</span>
+        <span class="badge status-pendente">Pendente</span>
+      </div>
+    `;
+    pendingAnalysisList.appendChild(item);
+  });
 }
 
 function renderReports(reports) {
