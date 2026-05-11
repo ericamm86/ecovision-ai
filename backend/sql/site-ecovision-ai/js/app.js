@@ -60,7 +60,10 @@ let streamIndex = 0;
 
 const loginScreen = document.querySelector("#loginScreen");
 const dashboardScreen = document.querySelector("#dashboardScreen");
+const loginForm = document.querySelector("#loginForm");
+const registerForm = document.querySelector("#registerForm");
 const authMessage = document.querySelector("#authMessage");
+const registerMessage = document.querySelector("#registerMessage");
 const reportMessage = document.querySelector("#reportMessage");
 const filterMessage = document.querySelector("#filterMessage");
 const reportsList = document.querySelector("#reportsList");
@@ -831,6 +834,8 @@ function startLiveDashboard() {
 
 function showDashboard() {
   loginScreen.classList.add("hidden");
+  registerForm.classList.add("hidden");
+  loginForm.classList.remove("hidden");
   dashboardScreen.classList.remove("hidden");
   document.querySelector("#userName").textContent = state.user?.name || "";
   document.querySelector("#lastUpdate").textContent = "Última atualização: agora";
@@ -839,9 +844,24 @@ function showDashboard() {
   loadDashboard();
 }
 
+function showLoginForm() {
+  registerForm.classList.add("hidden");
+  loginForm.classList.remove("hidden");
+  authMessage.textContent = "";
+  registerMessage.textContent = "";
+}
+
+function showRegisterForm() {
+  loginForm.classList.add("hidden");
+  registerForm.classList.remove("hidden");
+  authMessage.textContent = "";
+  registerMessage.textContent = "";
+}
+
 function showLogin() {
   dashboardScreen.classList.add("hidden");
   loginScreen.classList.remove("hidden");
+  showLoginForm();
 }
 
 async function loadDashboard() {
@@ -901,7 +921,7 @@ function renderReports(reports) {
   });
 }
 
-document.querySelector("#loginForm").addEventListener("submit", async (event) => {
+loginForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   authMessage.textContent = "Autenticando...";
 
@@ -922,23 +942,30 @@ document.querySelector("#loginForm").addEventListener("submit", async (event) =>
   }
 });
 
-document.querySelector("#createDemoUser").addEventListener("click", async () => {
-  authMessage.textContent = "Criando usuário demo...";
+registerForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  registerMessage.textContent = "Criando usuario...";
 
   try {
-    await api("/users/register", {
+    const data = await api("/users/register", {
       method: "POST",
       body: JSON.stringify({
-        name: "Ana",
-        email: "ana@ecovision.com",
-        password: "123456"
+        name: document.querySelector("#registerName").value,
+        email: document.querySelector("#registerEmail").value,
+        password: document.querySelector("#registerPassword").value
       })
     });
-    authMessage.textContent = "Usuário demo criado. Use ana@ecovision.com / 123456.";
+
+    setSession(data);
+    registerMessage.textContent = "";
+    showDashboard();
   } catch (error) {
-    authMessage.textContent = error.message;
+    registerMessage.textContent = error.message;
   }
 });
+
+document.querySelector("#showRegisterForm").addEventListener("click", showRegisterForm);
+document.querySelector("#showLoginForm").addEventListener("click", showLoginForm);
 
 document.querySelector("#logoutButton").addEventListener("click", () => {
   clearSession();

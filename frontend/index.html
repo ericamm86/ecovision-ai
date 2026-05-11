@@ -29,10 +29,28 @@
           Senha
           <input type="password" id="password" placeholder="123456" required>
         </label>
-        <button type="submit">Acessar dashboard</button>
-        <button type="button" class="secondary" id="createDemoUser">Criar usuário demo</button>
-        <a class="back-site presentation-link" href="/ecovision">Ver apresentação</a>
+        <button type="submit">Login</button>
+        <button type="button" class="secondary" id="showRegisterForm">Criar usuario</button>
         <p class="message" id="authMessage"></p>
+      </form>
+
+      <form class="auth-card hidden" id="registerForm">
+        <h2>Criar conta</h2>
+        <label>
+          Nome
+          <input type="text" id="registerName" placeholder="Seu nome" autocomplete="name" required>
+        </label>
+        <label>
+          Email
+          <input type="email" id="registerEmail" placeholder="voce@email.com" autocomplete="email" required>
+        </label>
+        <label>
+          Senha
+          <input type="password" id="registerPassword" placeholder="Digite sua senha" autocomplete="new-password" required>
+        </label>
+        <button type="submit">Cadastrar e acessar</button>
+        <button type="button" class="secondary" id="showLoginForm">Voltar para login</button>
+        <p class="message" id="registerMessage"></p>
       </form>
     </section>
 
